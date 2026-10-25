@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$GNAT — The Doubt Gnat</title>
+    <meta name="description" content="The tiny voice that makes you wait one more candle. $GNAT">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07070a;
+            --bg-soft: #0e0e14;
+            --card: #12121a;
+            --border: rgba(255,255,255,0.06);
+            --text: #f2f2f7;
+            --muted: #8b8b9e;
+            --accent: #a78bfa;
+            --accent-soft: rgba(167, 139, 250, 0.15);
+            --glow: rgba(167, 139, 250, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background noise + gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(167,139,250,0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(99,102,241,0.08), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 18px 0;
+            background: rgba(7,7,10,0.75);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0f;
+            box-shadow: 0 0 24px var(--glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 36px var(--glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--accent-soft);
+            border: 1px solid rgba(167,139,250,0.25);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 28px;
+        }
+
+        .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 4.2rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, #c4b5fd, #a78bfa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 520px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .gnat-main {
+            width: 180px;
+            height: auto;
+            filter: drop-shadow(0 0 40px rgba(167,139,250,0.3));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 540px;
+            margin-bottom: 48px;
+        }
+
+        /* STORY */
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .story-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .story-card p {
+            color: var(--muted);
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+        }
+
+        .story-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .quote {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text);
+            font-style: italic;
+            border-left: 3px solid var(--accent);
+            padding-left: 20px;
+            margin: 28px 0;
+        }
+
+        /* TOKENOMICS */
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .token-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .token-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(167,139,250,0.3);
+        }
+
+        .token-card .value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .token-card .label {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* HOW TO BUY */
+        .steps {
+            display: grid;
+            gap: 16px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .step h3 {
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .step p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, rgba(167,139,250,0.12), rgba(99,102,241,0.08));
+            border: 1px solid rgba(167,139,250,0.2);
+            border-radius: 28px;
+            padding: 60px 40px;
+        }
+
+        .cta-box h2 {
+            margin-bottom: 12px;
+        }
+
+        .cta-box p {
+            color: var(--muted);
+            margin-bottom: 32px;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--muted);
+            text-decoration: none;
+            margin: 0 12px;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .nav-links a:not(.btn) {
+                display: none;
+            }
+            .hero {
+                padding-top: 100px;
+            }
+            .cta-box {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="28" r="14" fill="#a78bfa" fill-opacity="0.2"/>
+                    <ellipse cx="32" cy="30" rx="11" ry="13" fill="#c4b5fd"/>
+                    <circle cx="27" cy="27" r="3.5" fill="#1e1b2e"/>
+                    <circle cx="37" cy="27" r="3.5" fill="#1e1b2e"/>
+                    <circle cx="28" cy="26" r="1.2" fill="white"/>
+                    <circle cx="38" cy="26" r="1.2" fill="white"/>
+                    <path d="M32 34 Q30 37 28 36" stroke="#1e1b2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                    <path d="M18 22 Q12 18 8 24" stroke="#c4b5fd" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M46 22 Q52 18 56 24" stroke="#c4b5fd" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M22 40 Q18 48 20 54" stroke="#a78bfa" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M42 40 Q46 48 44 54" stroke="#a78bfa" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M28 42 Q26 50 28 56" stroke="#a78bfa" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                    <path d="M36 42 Q38 50 36 56" stroke="#a78bfa" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                </svg>
+                GNAT
+            </a>
+            <div class="nav-links">
+                <a href="#story">Story</a>
+                <a href="#tokenomics">Tokenomics</a>
+                <a href="#buy">How to Buy</a>
+                <a href="#buy" class="btn btn-primary">Buy $GNAT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">The voice you shouldn't listen to</div>
+                <h1>Meet <span>$GNAT</span></h1>
+                <p>The tiny doubt that lands on your ear right before you click.<br>One more candle. One more second. One more mistake.</p>
+                <div class="hero-btns">
+                    <a href="#buy" class="btn btn-primary">Buy $GNAT</a>
+                    <a href="https://x.com/gnat_comm?s=11" target="_blank" class="btn btn-outline">Follow on X</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <svg class="gnat-main" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Soft glow -->
+                    <circle cx="100" cy="95" r="55" fill="url(#glow)" opacity="0.4"/>
+                    <!-- Body -->
+                    <ellipse cx="100" cy="105" rx="32" ry="42" fill="#c4b5fd"/>
+                    <ellipse cx="100" cy="100" rx="28" ry="36" fill="#ddd6fe"/>
+                    <!-- Eyes -->
+                    <circle cx="85" cy="92" r="14" fill="#1e1b2e"/>
+                    <circle cx="115" cy="92" r="14" fill="#1e1b2e"/>
+                    <circle cx="89" cy="88" r="5" fill="white"/>
+                    <circle cx="119" cy="88" r="5" fill="white"/>
+                    <circle cx="91" cy="90" r="2" fill="#1e1b2e"/>
+                    <circle cx="121" cy="90" r="2" fill="#1e1b2e"/>
+                    <!-- Mouth (whispering) -->
+                    <path d="M92 118 Q100 126 108 118" stroke="#1e1b2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- Antennae -->
+                    <path d="M78 70 Q70 50 62 58" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M122 70 Q130 50 138 58" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="62" cy="58" r="4" fill="#a78bfa"/>
+                    <circle cx="138" cy="58" r="4" fill="#a78bfa"/>
+                    <!-- Wings -->
+                    <ellipse cx="55" cy="95" rx="28" ry="18" fill="#e0e7ff" opacity="0.7" transform="rotate(-25 55 95)"/>
+                    <ellipse cx="145" cy="95" rx="28" ry="18" fill="#e0e7ff" opacity="0.7" transform="rotate(25 145 95)"/>
+                    <!-- Legs -->
+                    <path d="M78 140 Q70 160 65 175" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M90 145 Q85 165 82 180" stroke="#a78bfa" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M110 145 Q115 165 118 180" stroke="#a78bfa" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M122 140 Q130 160 135 175" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <defs>
+                        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#a78bfa"/>
+                            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORY -->
+    <section id="story">
+        <div class="container">
+            <div class="section-label">The Story</div>
+            <h2>He only appears<br>when you're almost sure.</h2>
+            <p class="section-desc">A tiny creature born from every hesitation, every "just one more candle", every bag you held too long.</p>
+
+            <div class="story-grid">
+                <div class="story-card">
+                    <p>You see the green candle. Your finger is already on the button.</p>
+                    <p>Then you hear it. A soft, almost polite buzz right next to your ear.</p>
+                    <div class="quote">"What if it goes higher?"</div>
+                    <p>You wait. The candle turns red. The gnat smiles. You never see it leave.</p>
+                </div>
+                <div class="story-card">
+                    <p>$GNAT is not a hero. He is not a villain either.</p>
+                    <p>He is simply the voice that has cost more money than any rugpull.</p>
+                    <p>This coin exists so that for once, the doubt has a face — and a ticker.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOKENOMICS -->
+    <section id="tokenomics">
+        <div class="container">
+            <div class="section-label">Tokenomics</div>
+            <h2>Simple. Clean. No games.</h2>
+            <p class="section-desc">Fair launch. No team wallets. No taxes. Just pure doubt in token form.</p>
+
+            <div class="token-grid">
+                <div class="token-card">
+                    <div class="value">1B</div>
+                    <div class="label">Total Supply</div>
+                </div>
+                <div class="token-card">
+                    <div class="value">0%</div>
+                    <div class="label">Tax</div>
+                </div>
+                <div class="token-card">
+                    <div class="value">100%</div>
+                    <div class="label">Liquidity Burned</div>
+                </div>
+                <div class="token-card">
+                    <div class="value">0</div>
+                    <div class="label">Team Allocation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW TO BUY -->
+    <section id="buy">
+        <div class="container">
+            <div class="section-label">How to Buy</div>
+            <h2>Get some $GNAT</h2>
+            <p class="section-desc">Three simple steps. The gnat will still try to stop you.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <h3>Create a wallet</h3>
+                        <p>Download Phantom or Solflare. Write down your seed phrase and never share it.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <h3>Get SOL</h3>
+                        <p>Buy SOL on any major exchange and send it to your wallet.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <h3>Buy $GNAT</h3>
+                        <p>Go to Axiom or Pumpfun, paste the contract address and buy. Ignore the buzzing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 12px;">Contract Address</p>
+                <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; display: inline-block; font-family: monospace; font-size: 0.95rem; color: var(--accent); word-break: break-all;">
+                    CA: ###™
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Don't listen to him.</h2>
+                <p>Buy $GNAT before the doubt wins again.</p>
+                <a href="#buy" class="btn btn-primary">Buy $GNAT Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p style="margin-bottom: 16px;">$GNAT — The Doubt Gnat</p>
+            <div>
+                <a href="https://x.com/gnat_comm?s=11" target="_blank">Twitter / X</a>
+                <a href="https://t.me/+XzkJSFSGLpk4Zjgy" target="_blank">Telegram</a>
+            </div>
+            <p style="margin-top: 24px; font-size: 0.8rem; opacity: 0.6;">This is a meme coin. Not financial advice. DYOR.</p>
+        </div>
+    </footer>
+</body>
+</html>
